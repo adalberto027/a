@@ -20,16 +20,13 @@ void buzzer_set_period(short cycles) {
 
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Alternar LEDs según el rango de las notas
-    if (notes[i] < 500) {         // Notas graves
-      red_led_on();
-    } else if (notes[i] < 1000) { // Notas medias
-      green_led_on();
-    } else {                      // Notas agudas
-      red_led_on();
-      green_led_on();             // Ambos LEDs encienden para notas altas
+    // Alternar LEDs para un efecto navideño
+    if (i % 2 == 0) {
+      red_led_on();  // Enciende LED rojo para notas pares
+    } else {
+      green_led_on();  // Enciende LED verde para notas impares
     }
-    
+
     // Configurar el buzzer con la frecuencia de la nota
     buzzer_set_period(1000000 / notes[i]);
 
@@ -38,7 +35,7 @@ void playTune(const int *notes, const int *tempo, int noteAmt) {
     while (dur--) {
       __delay_cycles(10000);
     }
-    
+
     // Apagar LEDs entre notas
     leds_off();
   }
@@ -48,29 +45,28 @@ void playTune(const int *notes, const int *tempo, int noteAmt) {
   leds_off();           // Asegurar que los LEDs estén apagados
 }
 
-
-void oot() { // Futuristic Theme
-  // Notas para la nueva melodía (en Hz)
-  const int notes[] = {C4, E4, G4, B4, C5, G4, E4, C4, D4, F4, A4, C5};
+void oot() { // Jingle Bells Theme
+  // Notas para la melodía navideña (en Hz)
+  const int notes[] = {E4, E4, E4, E4, E4, E4, E4, G4, C4, D4, E4,
+                       F4, F4, F4, F4, F4, E4, E4, E4, E4, D4, D4, E4, D4, G4};
   
   // Tempo para cada nota (duración en milisegundos)
-  const int tempo[] = {400, 400, 600, 800, 500, 300, 300, 400, 400, 400, 600, 800};
+  const int tempo[] = {400, 400, 800, 400, 400, 800, 400, 400, 400, 400, 800,
+                       400, 400, 800, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 800};
   
   // Calcular la cantidad de notas
   int noteAmt = sizeof(notes) / sizeof(notes[0]);
 
-  // Reproducir la melodía con efectos de LEDs
+  // Reproducir la melodía con efectos LED navideños
   for (int i = 0; i < noteAmt; i++) {
     // Efectos LED según el índice de la nota
-    if (i % 4 == 0) {           // Notas clave
+    if (i % 3 == 0) {           // Notas clave
       red_led_on();
-    } else if (i % 4 == 1) {    // Notas de transición
+    } else if (i % 3 == 1) {    // Notas de transición
       green_led_on();
-    } else if (i % 4 == 2) {    // Notas con énfasis
+    } else {                    // Notas finales del ciclo
       red_led_on();
       green_led_on();           // Ambos LEDs encienden
-    } else {
-      leds_off();               // Pausa visual
     }
 
     // Configurar el buzzer con la frecuencia de la nota actual
@@ -90,3 +86,4 @@ void oot() { // Futuristic Theme
   buzzer_set_period(0);
   leds_off();
 }
+
