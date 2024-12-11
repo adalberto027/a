@@ -20,25 +20,25 @@ void buzzer_set_period(short cycles) {
 
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Efecto LED suave y constante
+    // Alternar LEDs según las notas para un efecto navideño clásico
     if (i % 2 == 0) {
-      red_led_on();  // Enciende LED rojo para notas pares
+      red_led_on();  // Enciende LED rojo
     } else {
-      green_led_on();  // Enciende LED verde para notas impares
+      green_led_on();  // Enciende LED verde
     }
 
     // Configurar el buzzer con la frecuencia de la nota
     buzzer_set_period(1000000 / notes[i]);
 
-    // Duración relajada para mantener el ritmo navideño
+    // Duración de cada nota con ritmo navideño
     int dur = tempo[i];
     while (dur--) {
-      __delay_cycles(8000);  // Mantener un tempo tranquilo
+      __delay_cycles(8000);  // Mantener un ritmo reconocible
     }
 
-    // Apagar LEDs entre notas para un efecto de parpadeo sutil
+    // Pausar LEDs brevemente entre notas para un parpadeo suave
     leds_off();
-    __delay_cycles(100000);  // Pausa breve entre notas para suavidad
+    __delay_cycles(50000);
   }
 
   // Resetear el estado del buzzer y los LEDs
@@ -46,13 +46,19 @@ void playTune(const int *notes, const int *tempo, int noteAmt) {
   leds_off();           // Asegurar que los LEDs estén apagados
 }
 
-void oot() { // Silent Night Theme
-  // Notas para una melodía navideña clásica (en Hz)
-  const int notes[] = {G4, A4, G4, E4, G4, A4, B4, C5, B4, A4, G4, E4, G4, A4, G4};
+void oot() { // Jingle Bells Theme
+  // Notas para "Jingle Bells" (en Hz)
+  const int notes[] = {
+    E4, E4, E4, E4, E4, E4, E4, G4, C4, D4, E4,  // Dashing through the snow...
+    F4, F4, F4, F4, F4, E4, E4, E4, E4, D4, D4, E4, D4, G4  // In a one-horse open sleigh...
+  };
   
-  // Tempo para cada nota (duración en milisegundos)
-  const int tempo[] = {600, 600, 800, 600, 600, 600, 800, 800, 800, 600, 600, 800, 600, 600, 1000};
-  
+  // Tempo para cada nota (en milisegundos)
+  const int tempo[] = {
+    400, 400, 800, 400, 400, 800, 400, 400, 400, 400, 800,  // Dashing through the snow...
+    400, 400, 800, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 800  // In a one-horse open sleigh...
+  };
+
   // Calcular la cantidad de notas
   int noteAmt = sizeof(notes) / sizeof(notes[0]);
 
