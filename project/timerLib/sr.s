@@ -25,17 +25,25 @@ and_sr: nop
 	nop
 	ret
 
-;; New functionality: Toggle LED brightness level
-.global toggle_led_brightness
-toggle_led_brightness:
+;; New functionality: Pulse fade effect for green LED
+.global pulse_fade_green_led
+pulse_fade_green_led:
+	mov #0, r15
+loop:
+	cmp #255, r15
+	jeq decrease
+	inc r15
+	mov r15, &P1OUT
 	nop
-	cmp #0, r12
-	jeq low_brightness
-	high_brightness:
-	mov #0xFF, &P1OUT
-	jmp exit
-	low_brightness:
-	mov #0x55, &P1OUT
-	exit:
+	jmp loop
+
+decrease:
+	cmp #0, r15
+	jeq exit
+	dec r15
+	mov r15, &P1OUT
+	nop
+	jmp decrease
+exit:
 	nop
 	ret
