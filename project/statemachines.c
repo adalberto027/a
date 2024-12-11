@@ -46,7 +46,7 @@ void next_state(int state) {
     leds_off();
     red_led_on();
     //drawTP();
-    drawDefault(COLOR_GREEN);
+    drawDefault(COLOR_ORANGE);
     //tp();
     oot(); // added
     leds_off();
