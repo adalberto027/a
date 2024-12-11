@@ -1,34 +1,40 @@
-#include <msp430.h>
-#include "libTimer.h"
-#include "led.h"
-#include "switches.h"
-#include "buzzer.h"
-#include "lcdutils.h" // LCD utilities
-#include "lcddraw.h"  // LCD drawing functions
+#include "lcdutils.h"
+#include "lcddraw.h"
 
-#include "song_images.h" // Custom images for the song (e.g., Christmas tree or bells)
+void drawDefault(u_int colorBGR) {
+  clearScreen(colorBGR);
+  drawString5x7(10, 15, "The Legend of Zelda", COLOR_GOLD, colorBGR);
+  // find the height and width of the screen
+  u_char width = screenWidth, height = screenHeight;
+  // find the location of the top triangle
+  int centerCol = width / 2, centerRow = height / 4;
+  // set the length it each triangle
+  int sideLength = 20; 
 
-int main(void) {
-  configureClocks();   // Configure system clocks
-  lcd_init();          // Initialize the LCD screen
+  // draw the top triangle
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(centerCol + col, centerRow + row, COLOR_GOLD);
+    }
+  }
 
-  // Clear the screen and set a festive background color
-  clearScreen(COLOR_RED);
-  
-  // Draw a festive image or text on the LCD (e.g., Jingle Bells title)
-  drawString5x7(10, 10, "Jingle Bells", COLOR_GREEN, COLOR_RED);
+  // draw the bottom-left triangle
+  // find the location of the triangle
+  int leftCenterCol = centerCol - sideLength;
+  int leftCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GOLD);
+    }
+  }
 
-  // Initialize peripherals
-  switch_init();       // Initialize switches
-  led_init();          // Initialize LEDs
-  buzzer_init();       // Initialize buzzer
-
-  // Turn on the green LED to indicate ready state
-  green_led_on();
-
-  // Enable Watchdog Timer interrupts
-  enableWDTInterrupts();
-
-  // Main loop, CPU off and interrupts enabled
-  or_sr(0x18);
+  // draw the bottom-right triangle
+  // find the location of the triangle
+  int rightCenterCol = centerCol + sideLength;
+  int rightCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GOLD);
+    }
+  }
 }
