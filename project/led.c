@@ -2,53 +2,56 @@
 #include "led.h"
 #include "switches.h"
 
-// flags to check states
-unsigned char led_altered = 0;                    // initially unaltered (0)
-unsigned char r_led_on = 0, g_led_on = 0;         // initially off (0)
+// Flags to check states
+unsigned char led_altered = 0;                    // Initially unaltered (0)
+unsigned char r_led_on = 0, g_led_on = 0;         // Initially off (0)
 static char redVal[] = {0, LED_RED}, greenVal[] = {0, LED_GREEN};
 
-// arrays to represent possible states of leds (e.g. 0 = off, on = LED_RED)
+// Initialize LEDs
 void led_init() {
-  P1DIR |= LEDS;          // sets a bit in P1DIR (port 1) to 1 configuring it as an output
-  led_altered = 1;        // state of leds have been altered so update char to 1
-  led_update();           // call on led_update function
+  P1DIR |= LEDS;          // Configure LED pins as outputs
+  P1OUT &= ~LEDS;         // Turn off all LEDs initially
+  led_altered = 1;        // Indicate LEDs have been altered
+  led_update();           // Update LEDs to initial state
 }
 
-// updates the led states based on r_on/g_on
+// Update LEDs based on the current state
 void led_update() {
-  // check if the leds need to be updated (they have been altered)
   if (led_altered) {
-    char ledFlags = redVal[r_led_on] | greenVal[g_led_on];     // find the desired state for the leds (0 or 1)
-    // apply the ledFlags values without changing the other pins to output (leds)
-    P1OUT &= (0xff^LEDS) | ledFlags;                           // Clear the state of LEDs
-    P1OUT |= ledFlags;                                         // Update the LEDs to their new state (on or off)
-    led_altered = 0;                                           // Reset the state
+    char ledFlags = redVal[r_led_on] | greenVal[g_led_on];
+    P1OUT &= (0xff ^ LEDS) | ledFlags;  // Clear the state of LEDs
+    P1OUT |= ledFlags;                 // Apply the new LED states
+    led_altered = 0;                   // Reset the alteration flag
   }
 }
 
-// Synchronize LEDs with tone changes
-void playTuneWithLED(const int *notes, const int *tempo, int noteAmt) {
-  for (int i = 0; i < noteAmt; i++) {
-    if (i % 2 == 0) {
-      P1OUT |= LED_RED;                  // Turn on red LED
-      P1OUT &= ~LED_GREEN;               // Turn off green LED
-    } else {
-      P1OUT |= LED_GREEN;                // Turn on green LED
-      P1OUT &= ~LED_RED;                 // Turn off red LED
-    }
+// Turn on the green LED
+void green_led_on() {
+  P1OUT |= LED_GREEN;   // Turn on the green LED
+  P1OUT &= ~LED_RED;    // Turn off the red LED
+}
 
-    // Set buzzer frequency
-    buzzer_set_period(1000000 / notes[i]);
+// Turn on the red LED
+void red_led_on() {
+  P1OUT |= LED_RED;     // Turn on the red LED
+  P1OUT &= ~LED_GREEN;  // Turn off the green LED
+}
 
-    // Wait for the duration of the note
-    int dur = tempo[i];
-    while (dur--) {
-      __delay_cycles(8000);              // Delay adjusted for tone duration
-    }
+// Turn off both LEDs
+void leds_off() {
+  P1OUT &= ~LEDS;       // Turn off all LEDs
+}
+
+// Flash the LEDs
+void led_flash(int n) {
+  for (int i = 0; i < n; i++) {
+    red_led_on();                // Turn on the red LED
+    __delay_cycles(500000);      // Delay for visibility
+    leds_off();                  // Turn off LEDs
+    __delay_cycles(250000);      // Pause
+    green_led_on();              // Turn on the green LED
+    __delay_cycles(500000);      // Delay for visibility
+    leds_off();                  // Turn off LEDs
+    __delay_cycles(250000);      // Pause
   }
-
-  // Turn off both LEDs and stop the buzzer at the end
-  P1OUT &= ~LED_RED;
-  P1OUT &= ~LED_GREEN;
-  buzzer_set_period(0);
 }
