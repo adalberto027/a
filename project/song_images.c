@@ -4,31 +4,37 @@
 void drawDefault(u_int colorBGR) {
   clearScreen(colorBGR);
   drawString5x7(10, 15, "The Legend of Zelda", COLOR_GOLD, colorBGR);
-
-  // Find the height and width of the screen
+  // find the height and width of the screen
   u_char width = screenWidth, height = screenHeight;
-
-  // Find the location of the top of the tree
+  // find the location of the top triangle
   int centerCol = width / 2, centerRow = height / 4;
-  int sideLength = 20; // Base width of each section of the tree
+  // set the length it each triangle
+  int sideLength = 20; 
 
-  // Draw the tree (three stacked triangles to form a pine tree)
-  for (int level = 0; level < 3; level++) {
-    int levelRowStart = centerRow + level * sideLength / 2; // Start row for each level
-    int levelSideLength = sideLength + level * 10;         // Each level gets wider
-    for (int row = 0; row < sideLength / 2; row++) {
-      for (int col = -row; col <= row; col++) {
-        drawPixel(centerCol + col, levelRowStart + row, COLOR_GREEN);
-      }
+  // draw the top triangle
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(centerCol + col, centerRow + row, COLOR_GOLD);
     }
   }
 
-  // Draw the trunk of the tree
-  int trunkWidth = 6, trunkHeight = 10;
-  int trunkRowStart = centerRow + sideLength;              // Start of the trunk below the tree
-  for (int row = 0; row < trunkHeight; row++) {
-    for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
-      drawPixel(centerCol + col, trunkRowStart + row, COLOR_BROWN);
+  // draw the bottom-left triangle
+  // find the location of the triangle
+  int leftCenterCol = centerCol - sideLength;
+  int leftCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GOLD);
+    }
+  }
+
+  // draw the bottom-right triangle
+  // find the location of the triangle
+  int rightCenterCol = centerCol + sideLength;
+  int rightCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GOLD);
     }
   }
 }
