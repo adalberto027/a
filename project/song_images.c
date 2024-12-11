@@ -6,33 +6,46 @@ void drawDefault(u_int colorBGR) {
   clearScreen(colorBGR);
   
   // Draw a festive title at the top
-  drawString5x7(10, 10, "Jingle Bells", COLOR_WHITE, colorBGR);
+  drawString5x7(10, 15, "Merry Christmas", COLOR_WHITE, colorBGR);
   
   // Get the screen dimensions
   u_char width = screenWidth, height = screenHeight;
 
-  // Draw a Christmas tree at the center of the screen
+  // Find the location for the top triangle (tree top)
   int centerCol = width / 2, centerRow = height / 4;
-  int treeHeight = 30;  // Height of the tree
+  int sideLength = 20; // Side length of each triangle
 
-  // Draw the main triangle of the tree
-  for (int row = 0; row < treeHeight; row++) {
+  // Draw the top triangle (tree top)
+  for (int row = 0; row < sideLength; row++) {
     for (int col = -row; col <= row; col++) {
       drawPixel(centerCol + col, centerRow + row, COLOR_GREEN);
     }
   }
 
-  // Draw the trunk of the tree
-  int trunkHeight = 10, trunkWidth = 6;
-  for (int row = 0; row < trunkHeight; row++) {
-    for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
-      drawPixel(centerCol + col, centerRow + treeHeight + row, COLOR_BROWN);
+  // Draw the bottom-left triangle (left side of the tree)
+  int leftCenterCol = centerCol - sideLength;
+  int leftCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GREEN);
     }
   }
 
-  // Draw a decoration at the top of the tree (star)
-  drawPixel(centerCol, centerRow - 1, COLOR_YELLOW);
-  drawPixel(centerCol - 1, centerRow, COLOR_YELLOW);
-  drawPixel(centerCol + 1, centerRow, COLOR_YELLOW);
-  drawPixel(centerCol, centerRow + 1, COLOR_YELLOW);
+  // Draw the bottom-right triangle (right side of the tree)
+  int rightCenterCol = centerCol + sideLength;
+  int rightCenterRow = centerRow + sideLength;
+  for (int row = 0; row < sideLength; row++) {
+    for (int col = -row; col <= row; col++) {
+      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GREEN);
+    }
+  }
+
+  // Draw the tree trunk
+  int trunkHeight = 10, trunkWidth = 6;
+  int trunkCenterRow = centerRow + 2 * sideLength;
+  for (int row = 0; row < trunkHeight; row++) {
+    for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
+      drawPixel(centerCol + col, trunkCenterRow + row, COLOR_BROWN);
+    }
+  }
 }
