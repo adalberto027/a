@@ -36,7 +36,7 @@ void next_state(int state) {
     leds_off();
     red_led_on();
     //drawSOH();
-    drawDefault(COLOR_RED);
+    drawDefault(COLOR_PINK);
     //soh();
     oot(); // added
     leds_off();
