@@ -1,9 +1,3 @@
-
-Aquí tienes el código modificado para corregir los errores y mantener los nombres de los métodos exactamente igual. Además, cambié los colores de los LEDs para que coincidan con las funciones descriptivas.
-
-Código Modificado
-c
-Copy code
 #include <msp430.h>
 #include "led.h"
 #include "switches.h"
