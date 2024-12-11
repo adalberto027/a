@@ -2,38 +2,33 @@
 #include "lcddraw.h"
 
 void drawDefault(u_int colorBGR) {
-  // Clear the screen with the specified background color
   clearScreen(colorBGR);
-  
-  // Draw a festive title
-  drawString5x7(10, 15, "Merry Christmas!", COLOR_WHITE, colorBGR);
-  
-  // Get the screen dimensions
+  drawString5x7(10, 15, "The Legend of Zelda", COLOR_GOLD, colorBGR);
+
+  // Find the height and width of the screen
   u_char width = screenWidth, height = screenHeight;
 
-  // Find the location of the tree's top
+  // Find the location of the top of the tree
   int centerCol = width / 2, centerRow = height / 4;
-  int treeHeight = 40; // Height of the tree
+  int sideLength = 20; // Base width of each section of the tree
 
-  // Draw the main tree (a large green triangle)
-  for (int row = 0; row < treeHeight; row++) {
-    for (int col = -row; col <= row; col++) {
-      drawPixel(centerCol + col, centerRow + row, COLOR_GREEN);
+  // Draw the tree (three stacked triangles to form a pine tree)
+  for (int level = 0; level < 3; level++) {
+    int levelRowStart = centerRow + level * sideLength / 2; // Start row for each level
+    int levelSideLength = sideLength + level * 10;         // Each level gets wider
+    for (int row = 0; row < sideLength / 2; row++) {
+      for (int col = -row; col <= row; col++) {
+        drawPixel(centerCol + col, levelRowStart + row, COLOR_GREEN);
+      }
     }
   }
 
-  // Draw the tree trunk (a small brown rectangle)
-  int trunkHeight = 10, trunkWidth = 6;
-  int trunkCenterRow = centerRow + treeHeight;
+  // Draw the trunk of the tree
+  int trunkWidth = 6, trunkHeight = 10;
+  int trunkRowStart = centerRow + sideLength;              // Start of the trunk below the tree
   for (int row = 0; row < trunkHeight; row++) {
     for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
-      drawPixel(centerCol + col, trunkCenterRow + row, COLOR_BROWN);
+      drawPixel(centerCol + col, trunkRowStart + row, COLOR_BROWN);
     }
   }
-
-  // Draw a star at the top of the tree (a small yellow cross)
-  drawPixel(centerCol, centerRow - 1, COLOR_YELLOW);
-  drawPixel(centerCol - 1, centerRow, COLOR_YELLOW);
-  drawPixel(centerCol + 1, centerRow, COLOR_YELLOW);
-  drawPixel(centerCol, centerRow + 1, COLOR_YELLOW);
 }
