@@ -20,20 +20,25 @@ void buzzer_set_period(short cycles) {
 
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Alternar LEDs para un efecto navideño
-    if (i % 2 == 0) {
-      red_led_on();  // Enciende LED rojo para notas pares
+    // Efecto dinámico de LEDs, simulando luces de un pino de Navidad
+    if ((i % 4) == 0) {
+      red_led_on();  // Enciende LED rojo
+    } else if ((i % 4) == 1) {
+      green_led_on();  // Enciende LED verde
+    } else if ((i % 4) == 2) {
+      red_led_on();
+      green_led_on();  // Ambos LEDs para dar un efecto brillante
     } else {
-      green_led_on();  // Enciende LED verde para notas impares
+      leds_off();  // Pausa visual
     }
 
     // Configurar el buzzer con la frecuencia de la nota
     buzzer_set_period(1000000 / notes[i]);
 
-    // Controlar la duración de la nota
-    int dur = tempo[i];
+    // Reducir la duración de cada nota para hacerlo más movido
+    int dur = tempo[i] / 2;
     while (dur--) {
-      __delay_cycles(10000);
+      __delay_cycles(5000);  // Hacer las notas más rápidas
     }
 
     // Apagar LEDs entre notas
@@ -41,49 +46,21 @@ void playTune(const int *notes, const int *tempo, int noteAmt) {
   }
 
   // Resetear el estado del buzzer y los LEDs
-  buzzer_set_period(0); // Apagar el buzzer
-  leds_off();           // Asegurar que los LEDs estén apagados
+  buzzer_set_period(0);
+  leds_off();
 }
 
-void oot() { // Jingle Bells Theme
-  // Notas para la melodía navideña (en Hz)
-  const int notes[] = {E4, E4, E4, E4, E4, E4, E4, G4, C4, D4, E4,
-                       F4, F4, F4, F4, F4, E4, E4, E4, E4, D4, D4, E4, D4, G4};
+void oot() { // Christmas Tree Theme
+  // Notas para una melodía navideña rápida (en Hz)
+  const int notes[] = {E4, G4, A4, G4, E4, E4, F4, G4, F4, E4, D4, E4, F4, G4, A4, B4, A4, G4, E4};
   
   // Tempo para cada nota (duración en milisegundos)
-  const int tempo[] = {400, 400, 800, 400, 400, 800, 400, 400, 400, 400, 800,
-                       400, 400, 800, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 800};
+  const int tempo[] = {300, 300, 300, 300, 300, 200, 200, 300, 300, 200, 200, 300, 300, 300, 200, 300, 300, 300, 400};
   
   // Calcular la cantidad de notas
   int noteAmt = sizeof(notes) / sizeof(notes[0]);
 
-  // Reproducir la melodía con efectos LED navideños
-  for (int i = 0; i < noteAmt; i++) {
-    // Efectos LED según el índice de la nota
-    if (i % 3 == 0) {           // Notas clave
-      red_led_on();
-    } else if (i % 3 == 1) {    // Notas de transición
-      green_led_on();
-    } else {                    // Notas finales del ciclo
-      red_led_on();
-      green_led_on();           // Ambos LEDs encienden
-    }
-
-    // Configurar el buzzer con la frecuencia de la nota actual
-    buzzer_set_period(1000000 / notes[i]);
-
-    // Controlar la duración de la nota
-    int dur = tempo[i];
-    while (dur--) {
-      __delay_cycles(5000);     // Ajustar la duración del ciclo
-      if (dur < tempo[i] / 2) { // Apagar LEDs a la mitad de la duración
-        leds_off();
-      }
-    }
-  }
-
-  // Apagar el buzzer y los LEDs al finalizar
-  buzzer_set_period(0);
-  leds_off();
+  // Reproducir la melodía
+  playTune(notes, tempo, noteAmt);
 }
 
