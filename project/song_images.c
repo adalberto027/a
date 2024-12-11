@@ -2,191 +2,38 @@
 #include "lcddraw.h"
 
 void drawDefault(u_int colorBGR) {
+  // Clear the screen with the specified background color
   clearScreen(colorBGR);
-  drawString5x7(10, 15, "The Legend of Zelda", COLOR_GOLD, colorBGR);
-  // find the height and width of the screen
+  
+  // Draw a festive title
+  drawString5x7(10, 15, "Merry Christmas!", COLOR_WHITE, colorBGR);
+  
+  // Get the screen dimensions
   u_char width = screenWidth, height = screenHeight;
-  // find the location of the top triangle
+
+  // Find the location of the tree's top
   int centerCol = width / 2, centerRow = height / 4;
-  // set the length it each triangle
-  int sideLength = 20; 
+  int treeHeight = 40; // Height of the tree
 
-  // draw the top triangle
-  for (int row = 0; row < sideLength; row++) {
+  // Draw the main tree (a large green triangle)
+  for (int row = 0; row < treeHeight; row++) {
     for (int col = -row; col <= row; col++) {
-      drawPixel(centerCol + col, centerRow + row, COLOR_GOLD);
+      drawPixel(centerCol + col, centerRow + row, COLOR_GREEN);
     }
   }
 
-  // draw the bottom-left triangle
-  // find the location of the triangle
-  int leftCenterCol = centerCol - sideLength;
-  int leftCenterRow = centerRow + sideLength;
-  for (int row = 0; row < sideLength; row++) {
-    for (int col = -row; col <= row; col++) {
-      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GOLD);
+  // Draw the tree trunk (a small brown rectangle)
+  int trunkHeight = 10, trunkWidth = 6;
+  int trunkCenterRow = centerRow + treeHeight;
+  for (int row = 0; row < trunkHeight; row++) {
+    for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
+      drawPixel(centerCol + col, trunkCenterRow + row, COLOR_BROWN);
     }
   }
 
-  // draw the bottom-right triangle
-  // find the location of the triangle
-  int rightCenterCol = centerCol + sideLength;
-  int rightCenterRow = centerRow + sideLength;
-  for (int row = 0; row < sideLength; row++) {
-    for (int col = -row; col <= row; col++) {
-      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GOLD);
-    }
-  }
+  // Draw a star at the top of the tree (a small yellow cross)
+  drawPixel(centerCol, centerRow - 1, COLOR_YELLOW);
+  drawPixel(centerCol - 1, centerRow, COLOR_YELLOW);
+  drawPixel(centerCol + 1, centerRow, COLOR_YELLOW);
+  drawPixel(centerCol, centerRow + 1, COLOR_YELLOW);
 }
-
-//void drawZeldasLullaby() {
-  //clearScreen(COLOR_RED);
-  //drawString5x7(10, 15, "The Legend of Zelda", COLOR_YELLOW, COLOR_BLUE);
-  // find the height and width of the screen
-  //u_char width = screenWidth, height = screenHeight;
-  // find the location of the top triangle
-  //int centerCol = width / 2, centerRow = height / 4;
-  // set the length it each triangle
-  //int sideLength = 20; 
-
-  // draw the top triangle
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(centerCol + col, centerRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-left triangle
-  // find the location of the triangle
-  //int leftCenterCol = centerCol - sideLength;
-  //int leftCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-right triangle
-  // find the location of the triangle
-  //int rightCenterCol = centerCol + sideLength;
-  //int rightCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-//}
-
-//void drawOOT() {
-  //clearScreen(COLOR_ORANGE);
-  //drawString5x7(10, 15, "The Legend of Zelda", COLOR_YELLOW, COLOR_BLUE);
-  // find the height and width of the screen
-  //u_char width = screenWidth, height = screenHeight;
-  // find the location of the top triangle
-  //int centerCol = width / 2, centerRow = height / 4;
-  // set the length it each triangle
-  //int sideLength = 20; 
-
-  // draw the top triangle
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(centerCol + col, centerRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-left triangle
-  // find the location of the triangle
-  //int leftCenterCol = centerCol - sideLength;
-  //int leftCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-right triangle
-  // find the location of the triangle
-  //int rightCenterCol = centerCol + sideLength;
-  //int rightCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-//}
-
-//void drawSOH() {
-  //clearScreen(COLOR_BROWN);
-  //drawString5x7(10, 15, "The Legend of Zelda", COLOR_YELLOW, COLOR_BLUE);
-  // find the height and width of the screen
-  //u_char width = screenWidth, height = screenHeight;
-  // find the location of the top triangle
-  //int centerCol = width / 2, centerRow = height / 4;
-  // set the length it each triangle
-  //int sideLength = 20; 
-
-  // draw the top triangle
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(centerCol + col, centerRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-left triangle
-  // find the location of the triangle
-  //int leftCenterCol = centerCol - sideLength;
-  //int leftCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-right triangle
-  // find the location of the triangle
-  //int rightCenterCol = centerCol + sideLength;
-  //int rightCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-//}
-
-//void drawTP() {
-  //clearScreen(COLOR_GREEN);
-  //drawString5x7(10, 15, "The Legend of Zelda", COLOR_YELLOW, COLOR_BLUE);
-  // find the height and width of the screen
-  //u_char width = screenWidth, height = screenHeight;
-  // find the location of the top triangle
-  //int centerCol = width / 2, centerRow = height / 4;
-  // set the length it each triangle
-  //int sideLength = 20; 
-
-  // draw the top triangle
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(centerCol + col, centerRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-left triangle
-  // find the location of the triangle
-  //int leftCenterCol = centerCol - sideLength;
-  //int leftCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-
-  // draw the bottom-right triangle
-  // find the location of the triangle
-  //int rightCenterCol = centerCol + sideLength;
-  //int rightCenterRow = centerRow + sideLength;
-  //for (int row = 0; row < sideLength; row++) {
-    //for (int col = -row; col <= row; col++) {
-      //drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_YELLOW);
-    //}
-  //}
-//}
