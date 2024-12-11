@@ -1,12 +1,12 @@
 First, run "make all" in the project directory. After that, navigate to the toy directory and execute "make load" to upload the program to the MSP430 board.
 
-### New Functionality:
-1. Button 1: Activates a gradual brightness animation on both LEDs.
-2. Button 2: Switches between a fast blinking pattern and a slow one for the LEDs.
-3. Button 3: Plays a sequence of musical notes.
-4. Button 4: Resets the toy to its initial state (turns off all LEDs and the buzzer).
+### Redesigned Functionality:
+1. Button 1: Activates a "pulse fade" effect on the green LED, where it gradually brightens and dims.
+2. Button 2: Plays a short melody of three descending notes (e.g., DO, SI, LA) with increasing speed on subsequent presses.
+3. Button 3: Alternates between red and green LEDs flashing in an irregular pattern.
+4. Button 4: Engages a "light-off" sequence where both LEDs blink three times before turning off completely.
 
 ### Compilation and Usage:
 - Compile: Run "make all" from the main project directory.
 - Load: Navigate to the "toy" directory and run "make load".
-- Use: Interact with the buttons to explore the functionalities.
+- Use: Interact with the buttons to explore the unique functionalities.
