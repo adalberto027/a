@@ -2,50 +2,39 @@
 #include "lcddraw.h"
 
 void drawDefault(u_int colorBGR) {
-  // Clear the screen with a festive background color
   clearScreen(colorBGR);
-  
-  // Draw a festive title at the top
-  drawString5x7(10, 15, "Merry Christmas", COLOR_WHITE, colorBGR);
-  
-  // Get the screen dimensions
+  drawString5x7(10, 15, "The Legend of Zelda", COLOR_GOLD, colorBGR);
+  // find the height and width of the screen
   u_char width = screenWidth, height = screenHeight;
-
-  // Find the location for the top triangle (tree top)
+  // find the location of the top triangle
   int centerCol = width / 2, centerRow = height / 4;
-  int sideLength = 20; // Side length of each triangle
+  // set the length it each triangle
+  int sideLength = 20; 
 
-  // Draw the top triangle (tree top)
+  // draw the top triangle
   for (int row = 0; row < sideLength; row++) {
     for (int col = -row; col <= row; col++) {
-      drawPixel(centerCol + col, centerRow + row, COLOR_GREEN);
+      drawPixel(centerCol + col, centerRow + row, COLOR_GOLD);
     }
   }
 
-  // Draw the bottom-left triangle (left side of the tree)
+  // draw the bottom-left triangle
+  // find the location of the triangle
   int leftCenterCol = centerCol - sideLength;
   int leftCenterRow = centerRow + sideLength;
   for (int row = 0; row < sideLength; row++) {
     for (int col = -row; col <= row; col++) {
-      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GREEN);
+      drawPixel(leftCenterCol + col, leftCenterRow + row, COLOR_GOLD);
     }
   }
 
-  // Draw the bottom-right triangle (right side of the tree)
+  // draw the bottom-right triangle
+  // find the location of the triangle
   int rightCenterCol = centerCol + sideLength;
   int rightCenterRow = centerRow + sideLength;
   for (int row = 0; row < sideLength; row++) {
     for (int col = -row; col <= row; col++) {
-      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GREEN);
-    }
-  }
-
-  // Draw the tree trunk
-  int trunkHeight = 10, trunkWidth = 6;
-  int trunkCenterRow = centerRow + 2 * sideLength;
-  for (int row = 0; row < trunkHeight; row++) {
-    for (int col = -trunkWidth / 2; col <= trunkWidth / 2; col++) {
-      drawPixel(centerCol + col, trunkCenterRow + row, COLOR_BROWN);
+      drawPixel(rightCenterCol + col, rightCenterRow + row, COLOR_GOLD);
     }
   }
 }
