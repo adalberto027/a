@@ -5,6 +5,7 @@
 #include "statemachines.h"
 #include "led.h"
 
+// Initialize the buzzer
 void buzzer_init() {
     timerAUpmode();		/* used to drive speaker */
     P2SEL2 &= ~(BIT6 | BIT7);
@@ -13,41 +14,40 @@ void buzzer_init() {
     P2DIR = BIT6;		/* enable output to speaker (P2.6) */
 }
 
+// Set the period for the buzzer to produce tones
 void buzzer_set_period(short cycles) {
   CCR0 = cycles; 
   CCR1 = cycles >> 1;	
 }
 
+// Play the melody with synchronized LED behavior
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Efecto de luces navideñas alternando LEDs
+    // Alternate LEDs based on the note index
     if (i % 2 == 0) {
-      red_led_on();  // Enciende LED rojo
+      red_led_on();  // Turn on red LED
     } else {
-      green_led_on();  // Enciende LED verde
+      green_led_on();  // Turn on green LED
     }
 
-    // Configurar el buzzer para la nota actual
+    // Set the buzzer frequency for the current note
     buzzer_set_period(1000000 / notes[i]);
 
-    // Reproducir la nota con un ritmo clásico navideño
+    // Wait for the duration of the note
     int dur = tempo[i];
     while (dur--) {
-      __delay_cycles(8000);  // Tiempo para cada nota
+      __delay_cycles(8000);  // Delay based on the tempo
     }
-
-    // Apagar LEDs brevemente entre notas
-    leds_off();
-    __delay_cycles(50000);  // Breve pausa para transición suave
   }
 
-  // Resetear el buzzer y apagar los LEDs al finalizar
+  // Turn off LEDs and stop the buzzer at the end
   buzzer_set_period(0);
   leds_off();
 }
 
-void oot() { // Jingle Bells - Estribillo
-  // Notas para el estribillo de "Jingle Bells" (en Hz)
+// Main function to play Jingle Bells - Chorus
+void oot() {
+  // Notes for the chorus of "Jingle Bells" (in Hz)
   const int notes[] = {
     E4, E4, E4,  // Jingle bells
     E4, E4, E4,  // Jingle bells
@@ -56,7 +56,7 @@ void oot() { // Jingle Bells - Estribillo
     E4, D4, D4, E4, D4, G4  // In a one-horse open sleigh!
   };
 
-  // Tempo para cada nota (en milisegundos)
+  // Tempo for each note (in milliseconds)
   const int tempo[] = {
     400, 400, 800,  // Jingle bells
     400, 400, 800,  // Jingle bells
@@ -65,9 +65,9 @@ void oot() { // Jingle Bells - Estribillo
     400, 400, 400, 400, 400, 800  // In a one-horse open sleigh!
   };
 
-  // Calcular la cantidad de notas
+  // Calculate the number of notes
   int noteAmt = sizeof(notes) / sizeof(notes[0]);
 
-  // Reproducir la melodía
+  // Play the melody
   playTune(notes, tempo, noteAmt);
 }
