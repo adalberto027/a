@@ -20,42 +20,38 @@ void buzzer_set_period(short cycles) {
 
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Efecto dinámico de LEDs, simulando luces de un pino de Navidad
-    if ((i % 4) == 0) {
-      red_led_on();  // Enciende LED rojo
-    } else if ((i % 4) == 1) {
-      green_led_on();  // Enciende LED verde
-    } else if ((i % 4) == 2) {
-      red_led_on();
-      green_led_on();  // Ambos LEDs para dar un efecto brillante
+    // Efecto LED suave y constante
+    if (i % 2 == 0) {
+      red_led_on();  // Enciende LED rojo para notas pares
     } else {
-      leds_off();  // Pausa visual
+      green_led_on();  // Enciende LED verde para notas impares
     }
 
     // Configurar el buzzer con la frecuencia de la nota
     buzzer_set_period(1000000 / notes[i]);
 
-    // Reducir la duración de cada nota para hacerlo más movido
-    int dur = tempo[i] / 2;
+    // Duración relajada para mantener el ritmo navideño
+    int dur = tempo[i];
     while (dur--) {
-      __delay_cycles(5000);  // Hacer las notas más rápidas
+      __delay_cycles(8000);  // Mantener un tempo tranquilo
     }
 
-    // Apagar LEDs entre notas
+    // Apagar LEDs entre notas para un efecto de parpadeo sutil
     leds_off();
+    __delay_cycles(100000);  // Pausa breve entre notas para suavidad
   }
 
   // Resetear el estado del buzzer y los LEDs
-  buzzer_set_period(0);
-  leds_off();
+  buzzer_set_period(0); // Apagar el buzzer
+  leds_off();           // Asegurar que los LEDs estén apagados
 }
 
-void oot() { // Christmas Tree Theme
-  // Notas para una melodía navideña rápida (en Hz)
-  const int notes[] = {E4, G4, A4, G4, E4, E4, F4, G4, F4, E4, D4, E4, F4, G4, A4, B4, A4, G4, E4};
+void oot() { // Silent Night Theme
+  // Notas para una melodía navideña clásica (en Hz)
+  const int notes[] = {G4, A4, G4, E4, G4, A4, B4, C5, B4, A4, G4, E4, G4, A4, G4};
   
   // Tempo para cada nota (duración en milisegundos)
-  const int tempo[] = {300, 300, 300, 300, 300, 200, 200, 300, 300, 200, 200, 300, 300, 300, 200, 300, 300, 300, 400};
+  const int tempo[] = {600, 600, 800, 600, 600, 600, 800, 800, 800, 600, 600, 800, 600, 600, 1000};
   
   // Calcular la cantidad de notas
   int noteAmt = sizeof(notes) / sizeof(notes[0]);
