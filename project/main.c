@@ -3,32 +3,31 @@
 #include "led.h"
 #include "switches.h"
 #include "buzzer.h"
-#include "lcdutils.h" // LCD utilities
-#include "lcddraw.h"  // LCD drawing functions
+#include "lcdutils.h" // ADDED
+#include "lcddraw.h" // ADDED
 
-#include "song_images.h" // Custom images for the song (e.g., Christmas tree or bells)
+#include "song_images.h"
 
 int main(void) {
-  configureClocks();   // Configure system clocks
-  lcd_init();          // Initialize the LCD screen
-
-  // Clear the screen and set a festive background color
-  clearScreen(COLOR_RED);
+  configureClocks();
+  lcd_init(); // ADDED
+  //drawDefault();
+  //u_char width = screenWidth, height = screenHeight; // ADDED
+  //clearScreen(COLOR_BLUE); // ADDED
+  //int col = 0, row = 0; // ADDED
+  //int centerCol = width/2, centerRow = height/2; // ADDED
+  //for (row = 0; row < 20; row++) { // ADDED
+    //for (col = -row; col <= row; col+=2) { // ADDED
+      //drawPixel(centerCol + col, centerRow + row, COLOR_PINK); // ADDED
+      //}
+    //}
   
-  // Draw a festive image or text on the LCD (e.g., Jingle Bells title)
-  drawString5x7(10, 10, "Jingle Bells", COLOR_GREEN, COLOR_RED);
+  switch_init();              // initialize switches
+  led_init();                 // initialize led
+  buzzer_init();            // initialize buzzer
+  
+  green_led_on();             // turn on the green led
+  enableWDTInterrupts();      // enable WatchDog interrupts
 
-  // Initialize peripherals
-  switch_init();       // Initialize switches
-  led_init();          // Initialize LEDs
-  buzzer_init();       // Initialize buzzer
-
-  // Turn on the green LED to indicate ready state
-  green_led_on();
-
-  // Enable Watchdog Timer interrupts
-  enableWDTInterrupts();
-
-  // Main loop, CPU off and interrupts enabled
-  or_sr(0x18);
+  or_sr(0x18); // CPU off, GIE on
 }
