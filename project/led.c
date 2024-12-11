@@ -26,36 +26,29 @@ void led_update() {
   }
 }
 
-// turns on the green led
-void green_led_on() {
-  P1OUT |= LED_GREEN;                  // Turn on the green LED
-  __delay_cycles(300000);              // Adjusted delay for shorter visibility (sync with melody)
-}
+// Synchronize LEDs with tone changes
+void playTuneWithLED(const int *notes, const int *tempo, int noteAmt) {
+  for (int i = 0; i < noteAmt; i++) {
+    if (i % 2 == 0) {
+      P1OUT |= LED_RED;                  // Turn on red LED
+      P1OUT &= ~LED_GREEN;               // Turn off green LED
+    } else {
+      P1OUT |= LED_GREEN;                // Turn on green LED
+      P1OUT &= ~LED_RED;                 // Turn off red LED
+    }
 
-// turns on the red led
-void red_led_on() {
-  P1OUT |= LED_RED;                    // Turn on the red LED
-  __delay_cycles(300000);              // Adjusted delay for shorter visibility (sync with melody)
-}
+    // Set buzzer frequency
+    buzzer_set_period(1000000 / notes[i]);
 
-// turns off both leds
-void leds_off() {
-  P1OUT &= ~LED_GREEN;                 // Turn off the green LED
-  P1OUT &= ~LED_RED;                   // Turn off the red LED
-  __delay_cycles(100000);              // Shorter delay for smoother transitions
-}
-
-// flashes the leds
-void led_flash(int n) {
-  for (int i = 0; i < n; i++) {
-    P1OUT |= LED_RED;                  // Turn on red LED
-    __delay_cycles(500000);            // Delay for visibility
-    P1OUT &= ~LED_RED;                 // Turn off red LED
-    __delay_cycles(250000);            // Pause
-    P1OUT |= LED_GREEN;                // Turn on green LED
-    __delay_cycles(500000);            // Delay for visibility
-    P1OUT &= ~LED_GREEN;               // Turn off green LED
-    __delay_cycles(250000);            // Pause
+    // Wait for the duration of the note
+    int dur = tempo[i];
+    while (dur--) {
+      __delay_cycles(8000);              // Delay adjusted for tone duration
+    }
   }
-  leds_off();                          // Ensure LEDs are off after flashing
+
+  // Turn off both LEDs and stop the buzzer at the end
+  P1OUT &= ~LED_RED;
+  P1OUT &= ~LED_GREEN;
+  buzzer_set_period(0);
 }
