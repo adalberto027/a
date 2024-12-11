@@ -20,43 +20,49 @@ void buzzer_set_period(short cycles) {
 
 void playTune(const int *notes, const int *tempo, int noteAmt) {
   for (int i = 0; i < noteAmt; i++) {
-    // Alternar LEDs según las notas para un efecto navideño clásico
+    // Efecto de luces navideñas alternando LEDs
     if (i % 2 == 0) {
       red_led_on();  // Enciende LED rojo
     } else {
       green_led_on();  // Enciende LED verde
     }
 
-    // Configurar el buzzer con la frecuencia de la nota
+    // Configurar el buzzer para la nota actual
     buzzer_set_period(1000000 / notes[i]);
 
-    // Duración de cada nota con ritmo navideño
+    // Reproducir la nota con un ritmo clásico navideño
     int dur = tempo[i];
     while (dur--) {
-      __delay_cycles(8000);  // Mantener un ritmo reconocible
+      __delay_cycles(8000);  // Tiempo para cada nota
     }
 
-    // Pausar LEDs brevemente entre notas para un parpadeo suave
+    // Apagar LEDs brevemente entre notas
     leds_off();
-    __delay_cycles(50000);
+    __delay_cycles(50000);  // Breve pausa para transición suave
   }
 
-  // Resetear el estado del buzzer y los LEDs
-  buzzer_set_period(0); // Apagar el buzzer
-  leds_off();           // Asegurar que los LEDs estén apagados
+  // Resetear el buzzer y apagar los LEDs al finalizar
+  buzzer_set_period(0);
+  leds_off();
 }
 
-void oot() { // Jingle Bells Theme
-  // Notas para "Jingle Bells" (en Hz)
+void oot() { // Jingle Bells - Estribillo
+  // Notas para el estribillo de "Jingle Bells" (en Hz)
   const int notes[] = {
-    E4, E4, E4, E4, E4, E4, E4, G4, C4, D4, E4,  // Dashing through the snow...
-    F4, F4, F4, F4, F4, E4, E4, E4, E4, D4, D4, E4, D4, G4  // In a one-horse open sleigh...
+    E4, E4, E4,  // Jingle bells
+    E4, E4, E4,  // Jingle bells
+    E4, G4, C4, D4, E4,  // Jingle all the way!
+    F4, F4, F4, F4, F4, E4, E4, E4,  // Oh what fun it is to ride
+    E4, D4, D4, E4, D4, G4  // In a one-horse open sleigh!
   };
-  
+
   // Tempo para cada nota (en milisegundos)
   const int tempo[] = {
-    400, 400, 800, 400, 400, 800, 400, 400, 400, 400, 800,  // Dashing through the snow...
-    400, 400, 800, 400, 400, 400, 400, 400, 800, 400, 400, 400, 400, 800  // In a one-horse open sleigh...
+    400, 400, 800,  // Jingle bells
+    400, 400, 800,  // Jingle bells
+    400, 400, 400, 400, 800,  // Jingle all the way!
+    400, 400, 800, 400, 400, 400, 400, 800,  // Oh what fun it is to ride
+    400, 400, 400, 400, 400, 800  // In a one-horse open sleigh!
   };
 
   // Calcular la cantidad de notas
@@ -65,4 +71,3 @@ void oot() { // Jingle Bells Theme
   // Reproducir la melodía
   playTune(notes, tempo, noteAmt);
 }
-
